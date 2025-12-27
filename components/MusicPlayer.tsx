@@ -9,9 +9,7 @@ interface Track {
 // We use simple filenames assuming they are in the same directory as index.html
 // or served from the root.
 const TRACKS: Track[] = [
-  { title: 'Track 01', url: '1.mp3' },
-  // { title: 'Track 02', url: '2.mp3' },
-  // { title: 'Track 03', url: '3.mp3' },
+  { title: 'PPC - ROA & Hades66', url: '1.mp3' },
 ];
 
 const MusicPlayer: React.FC = () => {
