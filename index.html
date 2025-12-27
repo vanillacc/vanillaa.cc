@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>vanilla.cc</title>
+    <meta name="description" content="Anti-Cheat Analyst @ Epic Games" />
+    
+    <!-- Open Graph / Facebook / Discord -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="vanilla.cc" />
+    <meta property="og:description" content="Anti-Cheat Analyst @ Epic Games" />
+    <meta property="og:site_name" content="vanilla.cc" />
+    <meta name="theme-color" content="#000000" />
+    
+    <!-- Github -->
+    <meta name="github:card" content="summary" />
+    <meta name="github:title" content="vanilla.cc" />
+    <meta name="github:description" content="Anti-Cheat Analyst @ Epic Games" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM (UMD) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel Standalone for in-browser JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+      body {
+        background-color: #050505;
+        margin: 0;
+        font-family: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        cursor: default;
+        overflow: hidden;
+        color: #fff;
+      }
+      .font-mono {
+        font-family: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace !important;
+      }
+      ::selection {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+
+      /* Premium Entry Animation */
+      @keyframes fadeInBlur {
+        0% {
+          opacity: 0;
+          filter: blur(10px);
+          transform: scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0);
+          transform: scale(1);
+        }
+      }
+      .animate-enter {
+        animation: fadeInBlur 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+
+      /* CRT Scanline Animation */
+      @keyframes scanline {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 0 100%;
+        }
+      }
+      .animate-scanline {
+        animation: scanline 8s linear infinite;
+      }
+      
+      .select-none { user-select: none; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef } = React;
+
+      // --- Components ---
+
+      // Background.tsx
+      const Background = () => {
+        return (
+          <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">
+            {/* CSS-based Noise Generation */}
+            <div 
+              className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                filter: 'contrast(120%) brightness(100%)',
+              }}
+            />
+            
+            {/* Animated Scanlines */}
+            <div 
+              className="absolute inset-0 opacity-[0.03] animate-scanline"
+              style={{
+                background: 'linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2))',
+                backgroundSize: '100% 4px'
+              }}
+            />
+            
+            {/* Vignette */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.8) 100%)'
+              }}
+            />
+          </div>
+        );
+      };
+
+      // SocialLinks.tsx
+      const SocialLinks = () => {
+        const links = [
+          { name: 'discord', url: 'https://discord.com/users/1328122670419673161', label: 'Discord Profile' },
+          { name: 'github', url: 'https://github.com/vanillacc', label: 'GitHub Profile' },
+          { name: 'mail', url: 'mailto:uereverse@outlook.com', label: 'Mail Contact' },
+        ];
+
+        return (
+          <div className="group flex items-center justify-center gap-x-4 text-xs font-medium tracking-wide select-none">
+            {links.map((link, index) => (
+              <React.Fragment key={link.name}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="text-[#888] transition-all duration-300 cursor-pointer no-underline
+                    group-hover:text-[#444] hover:!text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+                >
+                  {link.name}
+                </a>
+                
+                {index < links.length - 1 && (
+                  <span className="text-[#262626] transition-colors duration-300 group-hover:text-[#1a1a1a]" aria-hidden="true">
+                    //
+                  </span>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        );
+      };
+
+      // Clock.tsx
+      const Clock = () => {
+        const [timeState, setTimeState] = useState({
+          time: '',
+          showSeparator: true
+        });
+
+        useEffect(() => {
+          const updateTime = () => {
+            const now = new Date();
+            
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = now.toLocaleString('en-US', { month: 'short' });
+
+            return { hours, minutes, day, month };
+          };
+
+          const tick = () => {
+            const { hours, minutes, day, month } = updateTime();
+            setTimeState(prev => ({
+              time: `${hours}:${minutes} . ${day} ${month}`,
+              showSeparator: !prev.showSeparator 
+            }));
+          };
+
+          tick();
+          const intervalId = setInterval(tick, 1000);
+
+          return () => clearInterval(intervalId);
+        }, []);
+
+        if (!timeState.time) return null;
+
+        const [timePart, datePart] = timeState.time.split(' . ');
+        const [hours, minutes] = timePart.split(':');
+
+        return (
+          <div className="fixed bottom-8 left-8 text-[#999] text-xs font-mono tracking-wider select-none tabular-nums transition-opacity duration-1000 animate-enter" style={{ animationDelay: '0.5s', opacity: 0, animationFillMode: 'forwards' }}>
+            <span>{hours}</span>
+            <span className={`transition-opacity duration-200 ${timeState.showSeparator ? 'opacity-100' : 'opacity-0'}`}>:</span>
+            <span>{minutes}</span>
+            <span className="mx-2 opacity-50">.</span>
+            <span>{datePart}</span>
+          </div>
+        );
+      };
+
+      // MusicPlayer.tsx
+      const MusicPlayer = () => {
+        const [isPlaying, setIsPlaying] = useState(false);
+        const [currentTrack, setCurrentTrack] = useState(null);
+        const audioRef = useRef(null);
+        const [volume] = useState(0.4); 
+
+        // Configuration matching provided file
+        const TRACKS = [
+          { title: 'Track 01', url: '1.mp3' },
+        ];
+
+        useEffect(() => {
+          if (TRACKS.length > 0) {
+            const randomIndex = Math.floor(Math.random() * TRACKS.length);
+            setCurrentTrack(TRACKS[randomIndex]);
+          }
+        }, []);
+
+        useEffect(() => {
+          if (audioRef.current) {
+            audioRef.current.volume = volume;
+            if (isPlaying) {
+              const playPromise = audioRef.current.play();
+              if (playPromise !== undefined) {
+                playPromise.catch((e) => {
+                  console.warn("Autoplay or Play prevented:", e);
+                  setIsPlaying(false);
+                });
+              }
+            } else {
+              audioRef.current.pause();
+            }
+          }
+        }, [isPlaying, currentTrack, volume]);
+
+        const togglePlay = () => {
+          if (!currentTrack) return;
+          setIsPlaying(!isPlaying);
+        };
+
+        const handleEnded = () => {
+          if (TRACKS.length > 1) {
+            let nextIndex;
+            do {
+              nextIndex = Math.floor(Math.random() * TRACKS.length);
+            } while (TRACKS[nextIndex] === currentTrack);
+            
+            setCurrentTrack(TRACKS[nextIndex]);
+            setIsPlaying(true);
+          } else {
+            // Loop single track
+            if (audioRef.current) {
+              audioRef.current.currentTime = 0;
+              audioRef.current.play().catch(() => setIsPlaying(false));
+            }
+          }
+        };
+
+        const handleError = () => {
+          console.warn(`Audio file not found: ${currentTrack?.url}`);
+          setIsPlaying(false);
+        };
+
+        const skipTrack = () => {
+           handleEnded();
+        };
+
+        if (!currentTrack) return null;
+
+        return (
+          <div className="fixed bottom-8 right-8 z-50 flex items-center gap-x-3 text-xs font-mono tracking-wide animate-enter" style={{ animationDelay: '0.6s', opacity: 0, animationFillMode: 'forwards' }}>
+            <audio 
+              ref={audioRef} 
+              src={currentTrack.url} 
+              onEnded={handleEnded}
+              onError={handleError}
+            />
+            
+            <div className="flex items-center gap-x-3 text-[#999] transition-colors duration-300 hover:text-[#ccc]">
+              {/* Play/Pause Button */}
+              <button 
+                onClick={togglePlay}
+                className="hover:text-white transition-colors focus:outline-none cursor-pointer p-1"
+                aria-label={isPlaying ? "Pause music" : "Play music"}
+              >
+                {isPlaying ? (
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="currentColor">
+                    <rect x="2" y="1" width="2" height="10" />
+                    <rect x="8" y="1" width="2" height="10" />
+                  </svg>
+                ) : (
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="currentColor">
+                    <path d="M3 1v10l8-5z" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Track Info */}
+              <div className="flex items-center gap-x-2 select-none group cursor-default">
+                 <span className="hidden md:inline-block opacity-50">listening to</span>
+                 <span 
+                   onClick={skipTrack}
+                   className="cursor-pointer hover:text-white hover:underline decoration-white/30 underline-offset-4 transition-all"
+                   title="Click to skip"
+                 >
+                   {currentTrack.title.toLowerCase()}
+                 </span>
+              </div>
+
+              {/* Visualizer */}
+              {isPlaying && (
+                <div className="flex gap-0.5 items-end h-3 ml-1 opacity-80">
+                  <div className="w-0.5 bg-current animate-[bounce_1s_infinite] h-2"></div>
+                  <div className="w-0.5 bg-current animate-[bounce_1.2s_infinite] h-3"></div>
+                  <div className="w-0.5 bg-current animate-[bounce_0.8s_infinite] h-1"></div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      };
+
+      // App.tsx
+      const App = () => {
+        useEffect(() => {
+          const handleVisibilityChange = () => {
+            if (document.hidden) {
+              document.title = 'Connection Lost...';
+            } else {
+              document.title = 'vanilla.cc';
+            }
+          };
+
+          document.addEventListener('visibilitychange', handleVisibilityChange);
+          return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+        }, []);
+
+        return (
+          <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-mono flex items-center justify-center selection:bg-white selection:text-black">
+            <Background />
+
+            <main className="relative z-10 flex flex-col items-center justify-center text-center px-4 animate-enter opacity-0">
+              {/* Main Title */}
+              <h1 className="text-white text-xl md:text-2xl font-semibold tracking-[-0.03em] mb-8 select-none cursor-default drop-shadow-2xl">
+                vanilla<span className="text-[#666] font-normal">.cc</span>
+              </h1>
+              
+              {/* Role */}
+              <span className="text-[#666] text-xs md:text-sm font-medium tracking-wide mb-12 block select-none cursor-default h-5 hover:text-[#888] transition-colors duration-300">
+                Anti-Cheat Analyst @ Epic Games
+              </span>
+
+              <SocialLinks />
+            </main>
+
+            <Clock />
+            <MusicPlayer />
+          </div>
+        );
+      };
+
+      // Index.tsx (Entry Point)
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Could not find root element to mount to");
+      }
+
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
