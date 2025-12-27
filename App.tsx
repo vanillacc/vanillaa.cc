@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import Clock from './components/Clock';
-import SocialLinks from './components/SocialLinks';
-import Background from './components/Background';
-import MusicPlayer from './components/MusicPlayer';
+import Clock from './components/Clock.tsx';
+import SocialLinks from './components/SocialLinks.tsx';
+import Background from './components/Background.tsx';
+import MusicPlayer from './components/MusicPlayer.tsx';
 
 const App: React.FC = () => {
   // Easter Egg: Change title when user switches tabs
