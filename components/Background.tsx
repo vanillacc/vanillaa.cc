@@ -3,7 +3,7 @@ import React from 'react';
 const Background: React.FC = () => {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">
-      {/* CSS-based Noise Generation */}
+      {}
       <div 
         className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
         style={{
@@ -12,7 +12,7 @@ const Background: React.FC = () => {
         }}
       />
       
-      {/* Animated Scanlines */}
+      {}
       <div 
         className="absolute inset-0 opacity-[0.03] animate-scanline"
         style={{
@@ -21,7 +21,7 @@ const Background: React.FC = () => {
         }}
       />
       
-      {/* Vignette */}
+      {}
       <div 
         className="absolute inset-0"
         style={{
