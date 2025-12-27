@@ -39,7 +39,6 @@ const Clock: React.FC = () => {
   const [hours, minutes] = timePart.split(':');
 
   return (
-    // Color set to #999 for good visibility against dark background
     <div className="fixed bottom-8 left-8 text-[#999] text-xs font-mono tracking-wider select-none tabular-nums transition-opacity duration-1000 animate-enter" style={{ animationDelay: '0.5s', opacity: 0, animationFillMode: 'forwards' }}>
       <span>{hours}</span>
       <span className={`${timeState.showSeparator ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200`}>:</span>
