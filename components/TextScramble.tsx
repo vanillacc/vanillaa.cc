@@ -8,17 +8,15 @@ interface TextScrambleProps {
   startDelay?: number;
 }
 
-// Tech-focused charset (no emojis, mostly symbols/numbers)
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/*-._';
 
 const TextScramble: React.FC<TextScrambleProps> = ({ 
   text, 
   className,
   scrambleSpeed = 30, 
-  revealSpeed = 0.5, // Characters per tick
+  revealSpeed = 0.5,
   startDelay = 0
 }) => {
-  // Initialize with random characters immediately to ensure "encrypted" state on load
   const [displayText, setDisplayText] = useState(() => 
     text.split('').map(() => CHARS[Math.floor(Math.random() * CHARS.length)]).join('')
   );
@@ -60,7 +58,6 @@ const TextScramble: React.FC<TextScrambleProps> = ({
   }, [text, scrambleSpeed, revealSpeed, isScrambling]);
 
   useEffect(() => {
-    // Wait for startDelay before kicking off the resolve process
     timeoutRef.current = window.setTimeout(() => {
       scramble();
     }, startDelay);
@@ -74,7 +71,7 @@ const TextScramble: React.FC<TextScrambleProps> = ({
   return (
     <span 
       className={`${className} inline-block`}
-      aria-label={text} // Accessibility: Screen readers read the real text
+      aria-label={text}
     >
       {displayText}
     </span>
