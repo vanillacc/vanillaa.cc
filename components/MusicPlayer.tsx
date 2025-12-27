@@ -114,7 +114,6 @@ const MusicPlayer: React.FC = () => {
              onClick={skipTrack}
              className="cursor-pointer hover:text-white hover:underline decoration-white/30 underline-offset-4 transition-all"
              title="Click to skip"
-             style={{ textTransform: 'none' }}
            >
              {currentTrack.title}
            </span>
