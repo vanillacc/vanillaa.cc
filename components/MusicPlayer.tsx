@@ -5,9 +5,6 @@ interface Track {
   url: string;
 }
 
-// Configuration:
-// We use simple filenames assuming they are in the same directory as index.html
-// or served from the root.
 const TRACKS: Track[] = [
   { title: 'PPC - ROA & Hades66', url: '1.mp3' },
 ];
@@ -33,7 +30,6 @@ const MusicPlayer: React.FC = () => {
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((e) => {
-            // Auto-play policy or file error
             setIsPlaying(false);
           });
         }
@@ -44,7 +40,6 @@ const MusicPlayer: React.FC = () => {
   }, [isPlaying, currentTrack, volume]);
 
   const togglePlay = () => {
-    // If no track is loaded, don't try to play
     if (!currentTrack) return;
     setIsPlaying(!isPlaying);
   };
@@ -59,7 +54,6 @@ const MusicPlayer: React.FC = () => {
       setCurrentTrack(TRACKS[nextIndex]);
       setIsPlaying(true);
     } else {
-      // Loop single track
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.play().catch(() => setIsPlaying(false));
@@ -68,7 +62,6 @@ const MusicPlayer: React.FC = () => {
   };
 
   const handleError = () => {
-    // Silent fail to avoid console spam if file is missing
     console.warn(`Audio file not found: ${currentTrack?.url}. Please ensure '1.mp3' is in the root folder.`);
     setIsPlaying(false);
   };
@@ -89,7 +82,7 @@ const MusicPlayer: React.FC = () => {
       />
       
       <div className="flex items-center gap-x-3 text-[#999] transition-colors duration-300 hover:text-[#ccc]">
-        {/* Play/Pause Button */}
+        {}
         <button 
           onClick={togglePlay}
           className="hover:text-white transition-colors focus:outline-none cursor-pointer p-1"
@@ -107,7 +100,7 @@ const MusicPlayer: React.FC = () => {
           )}
         </button>
 
-        {/* Track Info */}
+        {}
         <div className="flex items-center gap-x-2 select-none group cursor-default">
            <span className="hidden md:inline-block opacity-50">listening to</span>
            <span 
@@ -119,7 +112,7 @@ const MusicPlayer: React.FC = () => {
            </span>
         </div>
 
-        {/* Visualizer */}
+        {}
         {isPlaying && (
           <div className="flex gap-0.5 items-end h-3 ml-1 opacity-80">
             <div className="w-0.5 bg-current animate-[bounce_1s_infinite] h-2"></div>
